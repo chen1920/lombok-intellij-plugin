@@ -3,6 +3,7 @@ package de.plushnikov.intellij.plugin.action.delombok;
 import de.plushnikov.intellij.plugin.processor.clazz.DataProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.EqualsAndHashCodeProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.GetterProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.ModelProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.SetterProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.UtilityClassProcessor;
@@ -46,6 +47,7 @@ public class DelombokEverythingAction extends AbstractDelombokAction {
       findExtension(NoArgsConstructorProcessor.class),
 
       findExtension(DataProcessor.class),
+      findExtension(ModelProcessor.class),
       findExtension(GetterProcessor.class),
       findExtension(ValueProcessor.class),
       findExtension(WitherProcessor.class),

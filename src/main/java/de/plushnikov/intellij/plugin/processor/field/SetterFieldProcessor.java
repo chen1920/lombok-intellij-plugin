@@ -21,9 +21,9 @@ import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,8 +35,19 @@ import java.util.List;
  */
 public class SetterFieldProcessor extends AbstractFieldProcessor {
 
+  private Class<? extends Annotation> supportedAnnotationClass;
+  private final boolean builder;
+
   public SetterFieldProcessor(@NotNull ConfigDiscovery configDiscovery) {
-    super(configDiscovery, PsiMethod.class, Setter.class);
+    super(configDiscovery, PsiMethod.class, lombok.Setter.class);
+    this.supportedAnnotationClass = lombok.Setter.class;
+    builder = false;
+  }
+
+  public SetterFieldProcessor(@NotNull ConfigDiscovery configDiscovery, @NotNull Class<? extends Annotation> supportedAnnotationClass) {
+    super(configDiscovery, PsiMethod.class, supportedAnnotationClass);
+    this.supportedAnnotationClass = supportedAnnotationClass;
+    builder = true;
   }
 
   @Override
@@ -121,15 +132,19 @@ public class SetterFieldProcessor extends AbstractFieldProcessor {
     return LombokUtils.toSetterName(accessorsInfo, psiField.getName(), isBoolean);
   }
 
+  public PsiMethod createSetterMethod(@NotNull PsiField psiField, @NotNull PsiClass psiClass, @NotNull String methodModifier){
+    return createSetterMethod(psiField, psiClass, methodModifier, false);
+  }
+
   @NotNull
-  public PsiMethod createSetterMethod(@NotNull PsiField psiField, @NotNull PsiClass psiClass, @NotNull String methodModifier) {
+  public PsiMethod createSetterMethod(@NotNull PsiField psiField, @NotNull PsiClass psiClass, @NotNull String methodModifier, boolean builder) {
     final String fieldName = psiField.getName();
     final PsiType psiFieldType = psiField.getType();
-    final PsiAnnotation setterAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiField, Setter.class);
+    final PsiAnnotation setterAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiField, supportedAnnotationClass);
 
     final String methodName = getSetterName(psiField, PsiType.BOOLEAN.equals(psiFieldType));
 
-    PsiType returnType = getReturnType(psiField);
+    PsiType returnType = getReturnType(psiField, builder);
     LombokLightMethodBuilder methodBuilder = new LombokLightMethodBuilder(psiField.getManager(), methodName)
       .withMethodReturnType(returnType)
       .withContainingClass(psiClass)
@@ -178,9 +193,10 @@ public class SetterFieldProcessor extends AbstractFieldProcessor {
     return codeBlockText;
   }
 
-  private PsiType getReturnType(@NotNull PsiField psiField) {
+  private PsiType getReturnType(@NotNull PsiField psiField, boolean builder) {
     PsiType result = PsiType.VOID;
-    if (!psiField.hasModifierProperty(PsiModifier.STATIC) && AccessorsInfo.build(psiField).isChain()) {
+    boolean build = builder || this.builder || AccessorsInfo.build(psiField).isChain();
+    if (!psiField.hasModifierProperty(PsiModifier.STATIC) && build){
       final PsiClass fieldClass = psiField.getContainingClass();
       if (null != fieldClass) {
         result = PsiClassUtil.getTypeWithGenerics(fieldClass);

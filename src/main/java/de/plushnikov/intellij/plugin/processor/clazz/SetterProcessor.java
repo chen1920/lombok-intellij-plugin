@@ -66,12 +66,16 @@ public class SetterProcessor extends AbstractClassProcessor {
   }
 
   public Collection<PsiMethod> createFieldSetters(@NotNull PsiClass psiClass, @NotNull String methodModifier) {
+    return createFieldSetters(psiClass, methodModifier, false);
+  }
+
+  public Collection<PsiMethod> createFieldSetters(@NotNull PsiClass psiClass, @NotNull String methodModifier, boolean builder) {
     Collection<PsiMethod> result = new ArrayList<>();
 
     final Collection<PsiField> setterFields = filterSetterFields(psiClass);
 
     for (PsiField setterField : setterFields) {
-      result.add(fieldProcessor.createSetterMethod(setterField, psiClass, methodModifier));
+      result.add(fieldProcessor.createSetterMethod(setterField, psiClass, methodModifier, builder));
     }
     return result;
   }
