@@ -96,6 +96,7 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.DataProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ModelProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ModelFieldProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.TagProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.EqualsAndHashCodeProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.GetterProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.SetterProcessor"/>
@@ -108,6 +109,7 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderClassMethodProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderMethodProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.method.MainProcessor"/>
 
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ValueProcessor"/>
 
@@ -123,7 +125,6 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.field.DelegateFieldProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.field.GetterFieldProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.field.SetterFieldProcessor"/>
-    <processor implementation="de.plushnikov.intellij.plugin.processor.field.BuilderSetterFieldProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.field.WitherFieldProcessor"/>
 
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.DelegateMethodProcessor"/>

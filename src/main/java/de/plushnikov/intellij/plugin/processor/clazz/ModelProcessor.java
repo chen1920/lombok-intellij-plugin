@@ -23,12 +23,13 @@ import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author Plushnikov Michail
+ * @author chen
  */
 public class ModelProcessor extends AbstractClassProcessor {
 
@@ -70,7 +71,7 @@ public class ModelProcessor extends AbstractClassProcessor {
       target.addAll(setterProcessor.createFieldSetters(psiClass, PsiModifier.PUBLIC, builder));
     }
     PsiClass superClass = psiClass.getSuperClass();
-    if("Saveable".equals(superClass.getName())){
+    if (superClass != null && "Saveable".equals(superClass.getName())) {
       return;
     }
     Collection<PsiMethod> methods = PsiClassUtil.collectClassMethodsIntern(psiClass);
@@ -87,17 +88,21 @@ public class ModelProcessor extends AbstractClassProcessor {
         }
       }
     }
-    if (!haveNewObject) {
-      target.add(createNewObject(psiClass, "public"));
-    }
-    if (!haveNewArray) {
-      target.add(createNewArray(psiClass, "public"));
+    String classSimpleName = psiClass.getName();
+    if (classSimpleName != null && !classSimpleName.isEmpty()) {
+      if (!haveNewObject) {
+        target.add(createNewObject(psiClass, "public"));
+      }
+      if (!haveNewArray) {
+        target.add(createNewArray(psiClass, "public"));
+      }
     }
   }
 
 
   @NotNull
   public PsiMethod createNewObject(@NotNull PsiClass psiClass, @NotNull String methodModifier) {
+    String classSimpleName = psiClass.getName();
     final String methodName = "newObject";
     LombokLightMethodBuilder methodBuilder = new LombokLightMethodBuilder(psiClass.getManager(), methodName)
       .withMethodReturnType(PsiClassUtil.getTypeWithGenerics(psiClass))
@@ -106,17 +111,18 @@ public class ModelProcessor extends AbstractClassProcessor {
     if (StringUtil.isNotEmpty(methodModifier)) {
       methodBuilder.withModifier(methodModifier);
     }
-    final String blockText = "return new " + psiClass.getName() + "();";
+    final String blockText = "return new " + classSimpleName + "();";
     methodBuilder.withBody(PsiMethodUtil.createCodeBlockFromText(blockText, methodBuilder));
     return methodBuilder;
   }
 
   @NotNull
   public PsiMethod createNewArray(@NotNull PsiClass psiClass, @NotNull String methodModifier) {
+    String classSimpleName = psiClass.getName();
     final String methodName = "newArray";
     final Project project = psiClass.getProject();
     final PsiElementFactory psiElementFactory = JavaPsiFacade.getElementFactory(project);
-    final PsiType psiType = psiElementFactory.createTypeFromText(psiClass.getName() + "[]", psiClass);
+    final PsiType psiType = psiElementFactory.createTypeFromText(classSimpleName + "[]", psiClass);
     LombokLightMethodBuilder methodBuilder = new LombokLightMethodBuilder(psiClass.getManager(), methodName)
       .withMethodReturnType(psiType)
       .withContainingClass(psiClass)
@@ -125,7 +131,7 @@ public class ModelProcessor extends AbstractClassProcessor {
       methodBuilder.withModifier(methodModifier);
     }
     methodBuilder.withParameter("size", psiElementFactory.createTypeFromText("int", psiClass));
-    final String blockText = "return new " + psiClass.getName() + "[size];";
+    final String blockText = "return new " + classSimpleName + "[size];";
     methodBuilder.withBody(PsiMethodUtil.createCodeBlockFromText(blockText, methodBuilder));
     return methodBuilder;
   }
