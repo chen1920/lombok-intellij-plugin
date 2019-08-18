@@ -90,7 +90,7 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
     }
     final PsiClass psiClass = (PsiClass) element;
     // Skip processing of Annotations and Interfaces
-    if (psiClass.isAnnotationType() || psiClass.isInterface()) {
+    if (psiClass.isAnnotationType()) {
       return emptyResult;
     }
     // skip processing if plugin is disabled
@@ -155,12 +155,13 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
       return (Result<List<Psi>>) recursionGuard.doPreventingRecursion(psiClass, true, this::compute2);
     }
 
+    @SuppressWarnings("unchecked")
     private Result<List> compute2() {
       //        log.info(String.format("Process call for type: %s class: %s", type, psiClass.getQualifiedName()));
       final List<Psi> result = new ArrayList<>();
       final Collection<Processor> lombokProcessors = LombokProcessorProvider.getInstance(psiClass.getProject()).getLombokProcessors(type);
       for (Processor processor : lombokProcessors) {
-        result.addAll((Collection<Psi>) processor.process(psiClass));
+        result.addAll((Collection<Psi>) (Collection)processor.process(psiClass));
       }
       return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
     }

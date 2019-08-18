@@ -25,6 +25,7 @@
 
     <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.handler.BuilderHandler"/>
     <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.handler.DelegateHandler"/>
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.handler.WrapperHandler"/>
     <applicationService
       serviceImplementation="de.plushnikov.intellij.plugin.processor.handler.EqualsAndHashCodeToStringHandler"/>
 
@@ -110,6 +111,8 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderClassMethodProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderMethodProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.MainProcessor"/>
+
+    <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.wrap.WrapperClassProcessor"/>
 
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ValueProcessor"/>
 

@@ -23,7 +23,6 @@ import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
