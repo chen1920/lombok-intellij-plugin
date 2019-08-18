@@ -1,5 +1,5 @@
 plugins {
-  id "org.jetbrains.intellij" version "0.4.8"
+  id "org.jetbrains.intellij" version "0.4.10"
   id "org.jetbrains.grammarkit" version "2018.3"
   id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
@@ -55,7 +55,7 @@ intellij {
   sameSinceUntilBuild false
   sandboxDirectory = "${rootProject.projectDir}/idea-sandbox/idea-${ideaVersion}"
 
-  plugins 'coverage'
+  plugins 'java'
 }
 
 patchPluginXml {
@@ -86,10 +86,10 @@ configurations {
 }
 
 dependencies {
-  lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.6', classifier: 'sources', ext: 'jar'
+  lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.8', classifier: 'sources', ext: 'jar'
 
   testCompile group: 'junit', name: 'junit', version: '4.12'
-  testCompile group: 'org.mockito', name: 'mockito-core', version: '2.27.0'
+  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.0.0'
 }
 
 // Tasks
