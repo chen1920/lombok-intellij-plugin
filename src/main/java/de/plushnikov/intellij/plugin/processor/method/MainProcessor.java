@@ -29,8 +29,8 @@ public class MainProcessor extends AbstractMethodProcessor {
 
   private final Map<PsiClass, LombokLightMethodBuilder> map = new WeakHashMap();
 
-  public MainProcessor(@NotNull ConfigDiscovery configDiscovery) {
-    super(configDiscovery, PsiMethod.class, Main.class);
+  public MainProcessor() {
+    super(PsiMethod.class, Main.class);
   }
 
 

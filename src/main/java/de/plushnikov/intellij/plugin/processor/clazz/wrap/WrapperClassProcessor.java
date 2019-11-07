@@ -5,7 +5,6 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.passiontec.annotation.Wrap;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
 import de.plushnikov.intellij.plugin.processor.handler.WrapperHandler;
@@ -23,8 +22,8 @@ public class WrapperClassProcessor extends AbstractClassProcessor {
 
   private final WrapperHandler wrapperHandler;
 
-  public WrapperClassProcessor(@NotNull ConfigDiscovery configDiscovery, @NotNull WrapperHandler wrapperHandler) {
-    super(configDiscovery, PsiClass.class, Wrap.class);
+  public WrapperClassProcessor(@NotNull WrapperHandler wrapperHandler) {
+    super(PsiClass.class, Wrap.class);
     this.wrapperHandler = wrapperHandler;
   }
 

@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.passiontec.annotation.Model;
 import com.passiontec.annotation.Tag;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
@@ -21,8 +20,8 @@ public class ModelFieldProcessor extends AbstractClassProcessor {
 
   private final ReaderProcessor readerProcessor;
 
-  public ModelFieldProcessor(@NotNull ConfigDiscovery configDiscovery) {
-    super(configDiscovery, PsiField.class, Model.class);
+  public ModelFieldProcessor() {
+    super(PsiField.class, Model.class);
     this.readerProcessor = new ReaderProcessor();
   }
 

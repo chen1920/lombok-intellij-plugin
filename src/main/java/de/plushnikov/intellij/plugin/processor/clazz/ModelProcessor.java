@@ -12,7 +12,6 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiType;
 import com.passiontec.annotation.Model;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
@@ -35,9 +34,8 @@ public class ModelProcessor extends AbstractClassProcessor {
   private final GetterProcessor getterProcessor;
   private final SetterProcessor setterProcessor;
 
-  public ModelProcessor(@NotNull ConfigDiscovery configDiscovery,
-                        @NotNull GetterProcessor getterProcessor, @NotNull SetterProcessor setterProcessor) {
-    super(configDiscovery, PsiMethod.class, Model.class);
+  public ModelProcessor( @NotNull GetterProcessor getterProcessor, @NotNull SetterProcessor setterProcessor) {
+    super(PsiMethod.class, Model.class);
     this.getterProcessor = getterProcessor;
     this.setterProcessor = setterProcessor;
   }

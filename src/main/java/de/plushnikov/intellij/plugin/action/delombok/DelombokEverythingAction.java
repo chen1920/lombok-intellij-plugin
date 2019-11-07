@@ -1,5 +1,6 @@
 package de.plushnikov.intellij.plugin.action.delombok;
 
+import com.intellij.openapi.components.ServiceManager;
 import de.plushnikov.intellij.plugin.processor.clazz.DataProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.EqualsAndHashCodeProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.GetterProcessor;
