@@ -7,7 +7,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +35,7 @@ public abstract class AbstractLombokParsingTestCase extends AbstractLombokLightC
     return true;
   }
 
-  public void doTest() throws IOException {
+  public void doTest() {
     doTest(false);
   }
 
@@ -114,7 +113,8 @@ public abstract class AbstractLombokParsingTestCase extends AbstractLombokLightC
     LOG.debug("IntelliJ fields for class " + beforeClass.getName() + ": " + Arrays.toString(beforeClassFields));
     LOG.debug("Theirs fields for class " + afterClass.getName() + ": " + Arrays.toString(afterClassFields));
 
-    assertEquals("Field counts are different for Class " + beforeClass.getName(), afterClassFields.length, beforeClassFields.length);
+    assertEquals("Field are different for Class: " + beforeClass.getName(),
+      Arrays.toString(toList(afterClassFields)), Arrays.toString(toList(beforeClassFields)));
 
     for (PsiField afterField : afterClassFields) {
       boolean compared = false;
@@ -161,8 +161,9 @@ public abstract class AbstractLombokParsingTestCase extends AbstractLombokLightC
 
     for (String modifier : PsiModifier.MODIFIERS) {
       boolean haveSameModifiers = afterModifierList.hasModifierProperty(modifier) == beforeModifierList.hasModifierProperty(modifier);
-      final PsiElement afterModifierListParent = PsiTreeUtil.getParentOfType(afterModifierList, PsiElement.class);
-      assertTrue(modifier + " modifier is not equal for " + (null == afterModifierListParent ? "..." : afterModifierListParent.getText()), haveSameModifiers);
+      final PsiMethod afterModifierListParentMethod = PsiTreeUtil.getParentOfType(afterModifierList, PsiMethod.class);
+      final PsiClass afterModifierListParentClass = PsiTreeUtil.getParentOfType(afterModifierList, PsiClass.class);
+      assertTrue(modifier + " Modifier is not equal for " + (null == afterModifierListParentMethod ? afterModifierListParentClass.getName() : afterModifierListParentMethod.getText()), haveSameModifiers);
     }
 
     if (shouldCompareAnnotations()) {
@@ -255,8 +256,9 @@ public abstract class AbstractLombokParsingTestCase extends AbstractLombokLightC
     return result;
   }
 
-  private String[] toList(PsiMethod[] beforeMethods) {
-    return Arrays.stream(beforeMethods).map(PsiMethod::getName).sorted(String.CASE_INSENSITIVE_ORDER).toArray(String[]::new);
+  private String[] toList(PsiNamedElement[] beforeMethods) {
+    return Arrays.stream(beforeMethods).map(PsiNamedElement::getName)
+      .filter(java.util.Objects::isNull).sorted(String.CASE_INSENSITIVE_ORDER).toArray(String[]::new);
   }
 
   private void compareThrows(PsiReferenceList beforeThrows, PsiReferenceList afterThrows, PsiMethod psiMethod) {

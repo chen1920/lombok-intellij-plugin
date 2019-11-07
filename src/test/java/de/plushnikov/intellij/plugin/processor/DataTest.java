@@ -44,7 +44,27 @@ public class DataTest extends AbstractLombokParsingTestCase {
     doTest(true);
   }
 
+  public void testData$DataStaticConstructor2() {
+    doTest(true);
+  }
+
+  public void testData$DataStaticConstructor3() {
+    doTest(true);
+  }
+
   public void testData$DataWithGeneric176() {
+    doTest(true);
+  }
+
+  public void testData$Klasse663() {
+    doTest(true);
+  }
+
+  public void testData$DataAndBuilder() {
+    doTest(true);
+  }
+
+  public void testData$DataAndSuperBuilder() {
     doTest(true);
   }
 }
