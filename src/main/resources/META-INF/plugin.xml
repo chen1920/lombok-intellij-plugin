@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <idea-plugin url="https://github.com/mplushnikov/lombok-intellij-plugin">
-  <id>Lombook Plugin</id>
-  <name>Lombok</name>
+  <id>annotation-idea-plugin</id>
+  <name>注解处理插件</name>
   <vendor url="https://github.com/mplushnikov/lombok-intellij-plugin" email="lombokplugin@plushnikov.de">Michail
     Plushnikov
   </vendor>
@@ -17,6 +17,11 @@
   <depends>com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <codeInsight.lineMarkerProvider language="JAVA"
+                                    implementationClass="com.chen.idea.ui.RcXmlMarker"/>
+    <codeInsight.lineMarkerProvider language="XML"
+                                    implementationClass="com.chen.idea.ui.ViewXmlMarker"/>
+
     <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.ModelProcessor"/>
     <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.ModelFieldProcessor"/>
     <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.TagProcessor"/>
@@ -275,6 +280,9 @@
 
       <add-to-group group-id="RefactoringMenu" anchor="last"/>
     </group>
+    <action id="DesignerPlugin.OpenLayoutAction" class="com.chen.idea.ui.OpenLayoutAction" text="编辑xml界面">
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta M"/>
+    </action>
   </actions>
 
   <!--<li>TODO: Add generate actions for Lombok equals/hashcode, toString, getter, setter, constructor and maybe logger method</li>-->
