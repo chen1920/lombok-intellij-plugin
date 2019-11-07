@@ -1,6 +1,6 @@
 package com.chen.idea.ui;
 
-import com.sankuai.win.ui.json.JsonObject;
+import com.chen.idea.json.JsonObject;
 
 /**
  * @author chen
