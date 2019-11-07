@@ -34,7 +34,7 @@ public class ModelProcessor extends AbstractClassProcessor {
   private final GetterProcessor getterProcessor;
   private final SetterProcessor setterProcessor;
 
-  public ModelProcessor( @NotNull GetterProcessor getterProcessor, @NotNull SetterProcessor setterProcessor) {
+  public ModelProcessor(@NotNull GetterProcessor getterProcessor, @NotNull SetterProcessor setterProcessor) {
     super(PsiMethod.class, Model.class);
     this.getterProcessor = getterProcessor;
     this.setterProcessor = setterProcessor;

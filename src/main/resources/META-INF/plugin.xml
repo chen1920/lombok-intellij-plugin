@@ -17,6 +17,12 @@
   <depends>com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.ModelProcessor"/>
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.ModelFieldProcessor"/>
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.TagProcessor"/>
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.method.MainProcessor"/>
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.processor.clazz.wrap.WrapperClassProcessor"/>
+
     <postStartupActivity implementation="de.plushnikov.intellij.plugin.activity.LombokPluginUpdateActivity"/>
     <postStartupActivity implementation="de.plushnikov.intellij.plugin.activity.LombokProjectValidatorActivity"/>
 
@@ -125,7 +131,6 @@
 
     <daemon.highlightInfoFilter implementation="de.plushnikov.intellij.plugin.extension.LombokHighlightErrorFilter"/>
 
-    <fileTypeFactory implementation="de.plushnikov.intellij.plugin.language.LombokConfigFileTypeFactory"/>
     <lang.parserDefinition language="Lombok.Config"
                            implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigParserDefinition"/>
     <lang.syntaxHighlighterFactory language="Lombok.Config"
@@ -166,7 +171,7 @@
 
   <actions>
     <!--Override existing action from jetbrains by customized, to support constructor generation for classes with lombok defined constructors-->
-    <action id="GenerateConstructor" text="Constructor" overrides="true"
+    <action id="GenerateConstructor" text="Constructor"
             class="de.plushnikov.intellij.plugin.action.generate.LombokGenerateConstructorAction"/>
 
     <group id="LombokActionGroup" text="Lombok" description="Refactor code with lombok annotations"

@@ -4,7 +4,10 @@ import com.intellij.openapi.components.ServiceManager;
 import de.plushnikov.intellij.plugin.processor.clazz.DataProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.EqualsAndHashCodeProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.GetterProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.ModelFieldProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.ModelProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.SetterProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.TagProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.UtilityClassProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.ValueProcessor;
@@ -32,6 +35,7 @@ import de.plushnikov.intellij.plugin.processor.clazz.log.Log4jProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.LogProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.Slf4jProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.XSlf4jProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.wrap.WrapperClassProcessor;
 import de.plushnikov.intellij.plugin.processor.field.DelegateFieldProcessor;
 import de.plushnikov.intellij.plugin.processor.field.FieldNameConstantsFieldProcessor;
 import de.plushnikov.intellij.plugin.processor.field.GetterFieldProcessor;
@@ -40,6 +44,7 @@ import de.plushnikov.intellij.plugin.processor.field.WitherFieldProcessor;
 import de.plushnikov.intellij.plugin.processor.method.BuilderClassMethodProcessor;
 import de.plushnikov.intellij.plugin.processor.method.BuilderMethodProcessor;
 import de.plushnikov.intellij.plugin.processor.method.DelegateMethodProcessor;
+import de.plushnikov.intellij.plugin.processor.method.MainProcessor;
 import de.plushnikov.intellij.plugin.processor.modifier.FieldDefaultsModifierProcessor;
 import de.plushnikov.intellij.plugin.processor.modifier.ModifierProcessor;
 import de.plushnikov.intellij.plugin.processor.modifier.UtilityClassModifierProcessor;
@@ -67,6 +72,12 @@ public class LombokProcessorManager {
       ServiceManager.getService(JBossLogProcessor.class),
       ServiceManager.getService(FloggerProcessor.class),
       ServiceManager.getService(CustomLogProcessor.class),
+
+      ServiceManager.getService(TagProcessor.class),
+      ServiceManager.getService(MainProcessor.class),
+      ServiceManager.getService(ModelProcessor.class),
+      ServiceManager.getService(ModelFieldProcessor.class),
+      ServiceManager.getService(WrapperClassProcessor.class),
 
       ServiceManager.getService(DataProcessor.class),
       ServiceManager.getService(EqualsAndHashCodeProcessor.class),
