@@ -13,6 +13,10 @@ import de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderClassProcess
 import de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderPreDefinedInnerClassFieldProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderPreDefinedInnerClassMethodProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.builder.SuperBuilderClassProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.builder.SuperBuilderPreDefinedInnerClassFieldProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.builder.SuperBuilderPreDefinedInnerClassMethodProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.builder.SuperBuilderProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.AllArgsConstructorProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.NoArgsConstructorProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.RequiredArgsConstructorProcessor;
@@ -20,6 +24,7 @@ import de.plushnikov.intellij.plugin.processor.clazz.fieldnameconstants.FieldNam
 import de.plushnikov.intellij.plugin.processor.clazz.fieldnameconstants.FieldNameConstantsPredefinedInnerClassFieldProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.fieldnameconstants.FieldNameConstantsProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.CommonsLogProcessor;
+import de.plushnikov.intellij.plugin.processor.clazz.log.CustomLogProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.FloggerProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.JBossLogProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.log.Log4j2Processor;
@@ -36,48 +41,51 @@ import de.plushnikov.intellij.plugin.processor.method.BuilderClassMethodProcesso
 import de.plushnikov.intellij.plugin.processor.method.BuilderMethodProcessor;
 import de.plushnikov.intellij.plugin.processor.method.DelegateMethodProcessor;
 
-import static de.plushnikov.intellij.plugin.util.ExtensionsUtil.findExtension;
-
 public class DelombokEverythingAction extends AbstractDelombokAction {
 
   protected DelombokHandler createHandler() {
     return new DelombokHandler(true,
-      findExtension(RequiredArgsConstructorProcessor.class),
-      findExtension(AllArgsConstructorProcessor.class),
-      findExtension(NoArgsConstructorProcessor.class),
+      ServiceManager.getService(RequiredArgsConstructorProcessor.class),
+      ServiceManager.getService(AllArgsConstructorProcessor.class),
+      ServiceManager.getService(NoArgsConstructorProcessor.class),
 
-      findExtension(DataProcessor.class),
-      findExtension(ModelProcessor.class),
-      findExtension(GetterProcessor.class),
-      findExtension(ValueProcessor.class),
-      findExtension(WitherProcessor.class),
-      findExtension(SetterProcessor.class),
-      findExtension(EqualsAndHashCodeProcessor.class),
-      findExtension(ToStringProcessor.class),
+      ServiceManager.getService(DataProcessor.class),
+      ServiceManager.getService(ModelProcessor.class),
+      ServiceManager.getService(GetterProcessor.class),
+      ServiceManager.getService(ValueProcessor.class),
+      ServiceManager.getService(WitherProcessor.class),
+      ServiceManager.getService(SetterProcessor.class),
+      ServiceManager.getService(EqualsAndHashCodeProcessor.class),
+      ServiceManager.getService(ToStringProcessor.class),
 
-      findExtension(CommonsLogProcessor.class), findExtension(JBossLogProcessor.class), findExtension(Log4jProcessor.class),
-      findExtension(Log4j2Processor.class), findExtension(LogProcessor.class), findExtension(Slf4jProcessor.class),
-      findExtension(XSlf4jProcessor.class), findExtension(FloggerProcessor.class),
+      ServiceManager.getService(CommonsLogProcessor.class), ServiceManager.getService(JBossLogProcessor.class), ServiceManager.getService(Log4jProcessor.class),
+      ServiceManager.getService(Log4j2Processor.class), ServiceManager.getService(LogProcessor.class), ServiceManager.getService(Slf4jProcessor.class),
+      ServiceManager.getService(XSlf4jProcessor.class), ServiceManager.getService(FloggerProcessor.class), ServiceManager.getService(CustomLogProcessor.class),
 
-      findExtension(GetterFieldProcessor.class),
-      findExtension(SetterFieldProcessor.class),
-      findExtension(WitherFieldProcessor.class),
-      findExtension(DelegateFieldProcessor.class),
-      findExtension(DelegateMethodProcessor.class),
+      ServiceManager.getService(GetterFieldProcessor.class),
+      ServiceManager.getService(SetterFieldProcessor.class),
+      ServiceManager.getService(WitherFieldProcessor.class),
+      ServiceManager.getService(DelegateFieldProcessor.class),
+      ServiceManager.getService(DelegateMethodProcessor.class),
 
-      findExtension(FieldNameConstantsOldProcessor.class),
-      findExtension(FieldNameConstantsFieldProcessor.class),
-      findExtension(FieldNameConstantsProcessor.class),
-      findExtension(FieldNameConstantsPredefinedInnerClassFieldProcessor.class),
+      ServiceManager.getService(FieldNameConstantsOldProcessor.class),
+      ServiceManager.getService(FieldNameConstantsFieldProcessor.class),
+      ServiceManager.getService(FieldNameConstantsProcessor.class),
+      ServiceManager.getService(FieldNameConstantsPredefinedInnerClassFieldProcessor.class),
 
-      findExtension(UtilityClassProcessor.class),
+      ServiceManager.getService(UtilityClassProcessor.class),
 
-      findExtension(BuilderPreDefinedInnerClassFieldProcessor.class),
-      findExtension(BuilderPreDefinedInnerClassMethodProcessor.class),
-      findExtension(BuilderClassProcessor.class),
-      findExtension(BuilderClassMethodProcessor.class),
-      findExtension(BuilderMethodProcessor.class),
-      findExtension(BuilderProcessor.class));
+      ServiceManager.getService(BuilderPreDefinedInnerClassFieldProcessor.class),
+      ServiceManager.getService(BuilderPreDefinedInnerClassMethodProcessor.class),
+      ServiceManager.getService(BuilderClassProcessor.class),
+      ServiceManager.getService(BuilderClassMethodProcessor.class),
+      ServiceManager.getService(BuilderMethodProcessor.class),
+      ServiceManager.getService(BuilderProcessor.class),
+
+      ServiceManager.getService(SuperBuilderPreDefinedInnerClassFieldProcessor.class),
+      ServiceManager.getService(SuperBuilderPreDefinedInnerClassMethodProcessor.class),
+      ServiceManager.getService(SuperBuilderClassProcessor.class),
+      ServiceManager.getService(SuperBuilderProcessor.class));
   }
 
 }

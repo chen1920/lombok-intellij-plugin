@@ -1,6 +1,6 @@
 plugins {
   id "org.jetbrains.intellij" version "0.4.10"
-  id "org.jetbrains.grammarkit" version "2018.3"
+  id "org.jetbrains.grammarkit" version "2019.2.1"
   id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
@@ -8,9 +8,15 @@ repositories {
   maven {
     url "http://pixel.sankuai.com/repository/releases"
   }
+  jcenter()
   mavenCentral()
-  mavenLocal()
+  maven { url "https://www.jitpack.io" }
 }
+// Fix Bug https://github.com/jitpack/jitpack.io/issues/3973
+project.repositories.removeAll {
+  it instanceof MavenArtifactRepository && it.url.toString() == 'https://jitpack.io'
+}
+
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -19,7 +25,7 @@ apply plugin: 'org.jetbrains.grammarkit'
 apply plugin: 'jacoco'
 apply plugin: "com.github.ManifestClasspath"
 
-
+def isCI = System.getenv("CI")
 def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
 ideaVersion = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
 def isEAP = ideaVersion.contains("LATEST-EAP-SNAPSHOT") || ideaVersion.take(4).contains(".")
@@ -73,8 +79,7 @@ patchPluginXml {
 }
 
 publishPlugin {
-  username System.getenv('IJ_REPO_USERNAME')
-  password System.getenv('IJ_REPO_PASSWORD')
+  token System.getenv('IJ_PLUGIN_TOKEN')
 }
 
 jacocoTestReport {
@@ -90,12 +95,12 @@ configurations {
 }
 
 dependencies {
-  lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.8', classifier: 'sources', ext: 'jar'
+  lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.10', classifier: 'sources', ext: 'jar'
 
   annotation group: 'com.px', name: 'annotation', version: '1.0.2', classifier: 'sources', ext: 'jar'
 
   testCompile group: 'junit', name: 'junit', version: '4.12'
-  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.0.0'
+  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
 }
 
 // Tasks
@@ -108,6 +113,7 @@ copy {
     include 'lombok/AccessLevel.java'
     include 'lombok/*ArgsConstructor.java'
     include 'lombok/Cleanup.java'
+    include 'lombok/CustomLog.java'
     include 'lombok/Data.java'
     include 'lombok/Delegate.java'
     include 'lombok/Getter.java'
@@ -118,6 +124,7 @@ copy {
     include 'lombok/ToString.java'
     include 'lombok/SneakyThrows.java'
     include 'lombok/Value.java'
+    include 'lombok/With.java'
     include 'lombok/val.java'
     include 'lombok/var.java'
     include 'lombok/Singular.java'
@@ -142,12 +149,14 @@ copy {
   into("generated/src")
 }
 
-//grammarKit {
-//  //tag or short commit hash of IntelliJ patched JFlex
+grammarKit {
+  //tag or short commit hash of IntelliJ patched JFlex
 //  jflexRelease = '1.7.0-1'
-//  //tag or short commit hash of Grammar-Kit to use
-//  grammarKitRelease = '34fd65b92a'
-//}
+  //tag or short commit hash of Grammar-Kit to use
+  if (isEAP) {
+    grammarKitRelease = '07f30a1e7666f36ae780f614b6bbc89690ba36c3'
+  }
+}
 
 task generateLombokConfigParser(type: org.jetbrains.grammarkit.tasks.GenerateParser) {
   println "Generating Parser for GrammerKit: ${grammarKit.grammarKitRelease}"
@@ -176,15 +185,24 @@ check.dependsOn jacocoTestReport
 
 test {
   // show standard out and standard error of the test JVM(s) on the console
-  testLogging.showStandardStreams = true
+  testLogging {
+    exceptionFormat = 'full'
+    showStandardStreams = true
+  }
+  if( isCI ){
+    testLogging {
+      events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+      exceptionFormat "full"
+    }
+  }
 
   // listen to events in the test execution lifecycle
   beforeTest { descriptor ->
     logger.lifecycle("Running test: " + descriptor)
   }
 }
-//plugins.withType(JavaPlugin) {
-//  test {
-//    systemProperty "NO_FS_ROOTS_ACCESS_CHECK", "true"
-//  }
-//}
+
+runIde {
+//  jvmArgs '-agentpath:"D:\\yjpagent.dll"'
+//  jvmArgs '-Didea.ProcessCanceledException=disabled'
+}

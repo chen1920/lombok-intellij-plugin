@@ -10,7 +10,6 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiType;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
@@ -21,6 +20,7 @@ import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
+import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -38,14 +38,14 @@ public class SetterFieldProcessor extends AbstractFieldProcessor {
   private Class<? extends Annotation> supportedAnnotationClass;
   private final boolean builder;
 
-  public SetterFieldProcessor(@NotNull ConfigDiscovery configDiscovery) {
-    super(configDiscovery, PsiMethod.class, lombok.Setter.class);
+  public SetterFieldProcessor() {
+    super(PsiMethod.class, lombok.Setter.class);
     this.supportedAnnotationClass = lombok.Setter.class;
     builder = false;
   }
 
-  public SetterFieldProcessor(@NotNull ConfigDiscovery configDiscovery, @NotNull Class<? extends Annotation> supportedAnnotationClass) {
-    super(configDiscovery, PsiMethod.class, supportedAnnotationClass);
+  public SetterFieldProcessor(@NonNull Class<? extends Annotation> supportedAnnotationClass) {
+    super(PsiMethod.class, supportedAnnotationClass);
     this.supportedAnnotationClass = supportedAnnotationClass;
     builder = true;
   }

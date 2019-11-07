@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
@@ -24,11 +23,11 @@ import java.util.Collection;
 
 public abstract class AbstractFieldNameConstantsProcessor extends AbstractClassProcessor {
 
-  private static final String FIELD_NAME_CONSTANTS_INCLUDE = FieldNameConstants.Include.class.getName().replace("$", ".");
-  private static final String FIELD_NAME_CONSTANTS_EXCLUDE = FieldNameConstants.Exclude.class.getName().replace("$", ".");
+  private static final String FIELD_NAME_CONSTANTS_INCLUDE = FieldNameConstants.Include.class.getCanonicalName();
+  private static final String FIELD_NAME_CONSTANTS_EXCLUDE = FieldNameConstants.Exclude.class.getCanonicalName();
 
-  AbstractFieldNameConstantsProcessor(@NotNull ConfigDiscovery configDiscovery, @NotNull Class<? extends PsiElement> supportedClass, @NotNull Class<? extends Annotation> supportedAnnotationClass) {
-    super(configDiscovery, supportedClass, supportedAnnotationClass);
+  AbstractFieldNameConstantsProcessor(@NotNull Class<? extends PsiElement> supportedClass, @NotNull Class<? extends Annotation> supportedAnnotationClass) {
+    super(supportedClass, supportedAnnotationClass);
   }
 
   @Override
