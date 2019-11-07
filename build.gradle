@@ -86,10 +86,13 @@ jacocoTestReport {
 
 configurations {
   lombok
+  annotation
 }
 
 dependencies {
   lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.8', classifier: 'sources', ext: 'jar'
+
+  annotation group: 'com.px', name: 'annotation', version: '1.0.2', classifier: 'sources', ext: 'jar'
 
   testCompile group: 'junit', name: 'junit', version: '4.12'
   testCompile group: 'org.mockito', name: 'mockito-core', version: '3.0.0'

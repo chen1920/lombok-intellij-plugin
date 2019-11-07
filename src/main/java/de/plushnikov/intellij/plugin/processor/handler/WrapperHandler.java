@@ -10,6 +10,9 @@ import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameterListOwner;
 import com.passiontec.annotation.Wrap;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
@@ -35,6 +38,8 @@ import java.util.Optional;
 public class WrapperHandler {
   private static final String ANNOTATION_WRAPPER_CLASS_NAME = "className";
   private static final String ANNOTATION_PARENT_CLASS_NAME = "parentClass";
+  private static final String ANNOTATION_SET_METHOD_NAME = "setMethodName";
+  private static final String ANNOTATION_SET_CLASS_NAME = "setClassName";
   private final NoArgsConstructorProcessor noArgsConstructorProcessor;
 
   public WrapperHandler(@NotNull NoArgsConstructorProcessor noArgsConstructorProcessor) {
@@ -107,9 +112,29 @@ public class WrapperHandler {
       }
       methods.add(createWrapMethod(psiClass, classMethod, wrapperClass));
     }
+    methods.add(createSetWrapMethod(psiClass, psiAnnotation, wrapperClass));
     wrapperClass.withMethods(methods);
     return wrapperClass;
   }
+
+  private PsiMethod createSetWrapMethod(@NotNull PsiClass parentClass, PsiAnnotation psiAnnotation, @NotNull PsiClass wrapperClass) {
+    String methodName = PsiAnnotationUtil.getStringAnnotationValue(psiAnnotation, ANNOTATION_SET_METHOD_NAME);
+    if (methodName == null) {
+      methodName = "setWrapModule";
+    }
+
+//    String setClassName = PsiAnnotationUtil.getStringAnnotationValue(psiAnnotation, ANNOTATION_SET_CLASS_NAME);
+//    if (setClassName == null) {
+//      setClassName = "com.chen.module.Module";
+//    }
+    return new LombokLightMethodBuilder(parentClass.getManager(), methodName)
+        .withMethodReturnType(PsiType.VOID)
+        .withParameter("wrap", PsiClassUtil.getWildcardClassType(parentClass))
+        .withContainingClass(wrapperClass)
+        .withNavigationElement(parentClass)
+        .withModifier(PsiModifier.PUBLIC);
+  }
+
 
   @NotNull
   public PsiMethod createWrapMethod(@NotNull PsiClass parentClass, @Nullable PsiMethod psiMethod,
@@ -117,10 +142,14 @@ public class WrapperHandler {
 
     final LombokLightMethodBuilder methodBuilder =
       new LombokLightMethodBuilder(parentClass.getManager(), psiMethod.getName())
-      .withMethodReturnType(psiMethod.getReturnType())
-      .withContainingClass(wrapperClass)
-      .withNavigationElement(parentClass)
-      .withModifier(PsiModifier.PUBLIC);
+        .withMethodReturnType(psiMethod.getReturnType())
+        .withContainingClass(wrapperClass)
+        .withNavigationElement(parentClass)
+        .withModifier(PsiModifier.PUBLIC);
+    PsiParameter[] params = psiMethod.getParameterList().getParameters();
+    for (PsiParameter param : params) {
+      methodBuilder.withParameter(param);
+    }
     return methodBuilder;
   }
 
@@ -130,7 +159,9 @@ public class WrapperHandler {
   }
 
   @NotNull
-  private LombokLightClassBuilder createWrapperClass(@NotNull PsiClass psiClass, @NotNull PsiTypeParameterListOwner psiTypeParameterListOwner, final boolean isStatic, @NotNull PsiAnnotation psiAnnotation) {
+  private LombokLightClassBuilder createWrapperClass(@NotNull PsiClass psiClass,
+                                                     @NotNull PsiTypeParameterListOwner psiTypeParameterListOwner,
+                                                     final boolean isStatic, @NotNull PsiAnnotation psiAnnotation) {
     PsiMethod psiMethod = null;
     if (psiTypeParameterListOwner instanceof PsiMethod) {
       psiMethod = (PsiMethod) psiTypeParameterListOwner;
