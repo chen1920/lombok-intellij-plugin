@@ -1,6 +1,6 @@
 plugins {
-  id "org.jetbrains.intellij" version "0.4.10"
-  id "org.jetbrains.grammarkit" version "2019.2.1"
+  id "org.jetbrains.intellij" version "0.4.15"
+  id "org.jetbrains.grammarkit" version "2019.3"
   id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
@@ -57,8 +57,6 @@ intellij {
   println "Building for IntelliJ version: ${version}"
 
   pluginName pluginName
-  updateSinceUntilBuild true
-  sameSinceUntilBuild false
   sandboxDirectory = "${rootProject.projectDir}/idea-sandbox/idea-${ideaVersion}"
 
   plugins 'java'
@@ -66,10 +64,6 @@ intellij {
 
 patchPluginXml {
   version artifactVersion
-  // use open until build for last release and EAP-Build
-  if (isEAP || (ideaVersion == lastReleaseVersion)) {
-    untilBuild ""
-  }
 
   pluginDescription(file(descriptionFile).text)
   changeNotes(file(changesFile).text)
@@ -93,8 +87,9 @@ configurations {
 dependencies {
   lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.10', classifier: 'sources', ext: 'jar'
 
-  testCompile group: 'junit', name: 'junit', version: '4.12'
-  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+  testImplementation("junit:junit:4.13")
+  testImplementation("org.mockito:mockito-core:3.2.4")
+  testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.5.2")
 }
 
 // Tasks
@@ -133,15 +128,6 @@ copy {
     include '**/*.txt'
   }
   into("generated/resources")
-}
-
-grammarKit {
-  //tag or short commit hash of IntelliJ patched JFlex
-//  jflexRelease = '1.7.0-1'
-  //tag or short commit hash of Grammar-Kit to use
-  if (isEAP) {
-    grammarKitRelease = '07f30a1e7666f36ae780f614b6bbc89690ba36c3'
-  }
 }
 
 task generateLombokConfigParser(type: org.jetbrains.grammarkit.tasks.GenerateParser) {
