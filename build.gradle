@@ -1,6 +1,6 @@
 plugins {
-  id "org.jetbrains.intellij" version "0.4.15"
-  id "org.jetbrains.grammarkit" version "2019.3"
+  id "org.jetbrains.intellij" version "0.4.16"
+  id "org.jetbrains.grammarkit" version "2020.1"
   id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
 }
 
@@ -85,11 +85,11 @@ configurations {
 }
 
 dependencies {
-  lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.10', classifier: 'sources', ext: 'jar'
+  lombok group: 'org.projectlombok', name: 'lombok', version: '1.18.12', classifier: 'sources', ext: 'jar'
 
   testImplementation("junit:junit:4.13")
-  testImplementation("org.mockito:mockito-core:3.2.4")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.5.2")
+  testImplementation("org.mockito:mockito-core:3.3.0")
+  testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.6.0")
 }
 
 // Tasks

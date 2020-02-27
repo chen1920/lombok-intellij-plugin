@@ -1,5 +1,6 @@
 package de.plushnikov.intellij.plugin.processor;
 
+import com.intellij.openapi.util.RecursionManager;
 import de.plushnikov.intellij.plugin.AbstractLombokParsingTestCase;
 
 /**
@@ -17,6 +18,9 @@ public class BuilderTest extends AbstractLombokParsingTestCase {
     super.setUp();
     // Add dummy classes, which are absent in mockJDK
     myFixture.addClass("package java.util;\n  public interface NavigableMap<K,V> extends java.util.SortedMap<K,V> {}");
+
+    //TODO disable assertions for the moment
+    RecursionManager.disableMissedCacheAssertions(myFixture.getProjectDisposable());
   }
 
   // This test is lombok's homepage example.
@@ -41,6 +45,10 @@ public class BuilderTest extends AbstractLombokParsingTestCase {
     doTest(true);
   }
 
+  public void testBuilder$BuilderWithAccessorsWithSetterPrefix() {
+    doTest(true);
+  }
+
   public void testBuilder$BuilderWithFieldAccessors() {
     doTest(true);
   }
@@ -55,6 +63,10 @@ public class BuilderTest extends AbstractLombokParsingTestCase {
   }
 
   public void testBuilder$BuilderConstructorException() {
+    doTest(true);
+  }
+
+  public void testBuilder$BuilderMultipleConstructorException() {
     doTest(true);
   }
 
@@ -79,6 +91,10 @@ public class BuilderTest extends AbstractLombokParsingTestCase {
   }
 
   public void testBuilder$BuilderSingularSets() {
+    doTest(true);
+  }
+
+  public void testBuilder$BuilderSingularSetsWithSetterPrefix() {
     doTest(true);
   }
 
