@@ -7,7 +7,7 @@
   </vendor>
   <version>XXX</version>
 
-  <idea-version since-build="181.00"/>
+  <idea-version since-build="190.00"/>
 
   <description><![CDATA[ Description will be added by gradle build]]></description>
   <category>Tools Integration</category>
@@ -115,7 +115,6 @@
 
     <lang.psiAugmentProvider implementation="de.plushnikov.intellij.plugin.provider.LombokAugmentProvider"/>
     <implicitUsageProvider implementation="de.plushnikov.intellij.plugin.provider.LombokImplicitUsageProvider"/>
-    <inspectionToolProvider implementation="de.plushnikov.intellij.plugin.provider.LombokInspectionProvider"/>
     <projectConfigurable instance="de.plushnikov.intellij.plugin.settings.ProjectSettingsPage"/>
 
     <treeGenerator implementation="de.plushnikov.intellij.plugin.extension.LombokLightMethodTreeGenerator"/>
@@ -124,7 +123,9 @@
 
     <daemon.highlightInfoFilter implementation="de.plushnikov.intellij.plugin.extension.LombokHighlightErrorFilter"/>
 
-    <fileTypeFactory implementation="de.plushnikov.intellij.plugin.language.LombokConfigFileTypeFactory"/>
+    <fileType implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigFileType" name="LOMBOK_CONFIG"
+              language="Lombok.Config"
+              fieldName="INSTANCE" extensions="config" fileNames="lombok.config"/>
     <lang.parserDefinition language="Lombok.Config"
                            implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigParserDefinition"/>
     <lang.syntaxHighlighterFactory language="Lombok.Config"
@@ -158,6 +159,44 @@
     <inlineActionHandler implementation="de.plushnikov.intellij.plugin.action.inline.LombokInlineMethodHandler"/>
 
     <canBeFinal implementation="de.plushnikov.intellij.plugin.extension.LombokCanBeFinalHandler"/>
+
+    <localInspection
+      displayName="Lombok annotations"
+      groupName="Lombok"
+      shortName="Lombok"
+      enabledByDefault="true"
+      implementationClass="de.plushnikov.intellij.plugin.inspection.LombokInspection"/>
+
+    <localInspection
+      displayName="Deprecated Lombok annotations"
+      groupName="Lombok"
+      shortName="DeprecatedLombok"
+      enabledByDefault="true"
+      implementationClass="de.plushnikov.intellij.plugin.inspection.DeprecatedLombokAnnotationInspection"/>
+
+    <localInspection
+      displayName="@Value modifiers"
+      groupPath="Lombok"
+      groupName="Redundant modifiers"
+      shortName="RedundantModifiersValueLombok"
+      enabledByDefault="true"
+      implementationClass="de.plushnikov.intellij.plugin.inspection.modifiers.RedundantModifiersOnValueLombokAnnotationInspection"/>
+
+    <localInspection
+      displayName="@UtilityClass modifiers"
+      groupPath="Lombok"
+      groupName="Redundant modifiers"
+      shortName="RedundantModifiersUtilityClassLombok"
+      enabledByDefault="true"
+      implementationClass="de.plushnikov.intellij.plugin.inspection.modifiers.RedundantModifiersOnUtilityClassLombokAnnotationInspection"/>
+
+    <localInspection
+      displayName="@Slf4j"
+      groupPath="Lombok"
+      groupName="Redundant definitions"
+      shortName="RedundantSlf4jDefinition"
+      enabledByDefault="true"
+      implementationClass="de.plushnikov.intellij.plugin.inspection.RedundantSlf4jDefinitionInspection"/>
 
     <codeInsight.template.postfixTemplateProvider language="JAVA"
                                                   implementationClass="de.plushnikov.intellij.plugin.extension.postfix.LombokPostfixTemplateProvider"/>

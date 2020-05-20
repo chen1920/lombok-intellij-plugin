@@ -1,6 +1,5 @@
 package de.plushnikov.intellij.plugin.inspection;
 
-import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.AddAnnotationFix;
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -21,29 +20,6 @@ public class DeprecatedLombokAnnotationInspection extends AbstractBaseJavaLocalI
 
   @NotNull
   @Override
-  public String getDisplayName() {
-    return "Deprecated lombok annotations inspection";
-  }
-
-  @NotNull
-  @Override
-  public String getGroupDisplayName() {
-    return GroupNames.BUGS_GROUP_NAME;
-  }
-
-  @NotNull
-  @Override
-  public String getShortName() {
-    return "DeprecatedLombok";
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  @NotNull
-  @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
     return new LombokElementVisitor(holder);
   }
@@ -58,22 +34,25 @@ public class DeprecatedLombokAnnotationInspection extends AbstractBaseJavaLocalI
 
     @Override
     public void visitAnnotation(final PsiAnnotation annotation) {
-      checkFor("lombok.experimental.Builder", annotation);
-      checkFor("lombok.experimental.Value", annotation);
+      checkFor("lombok.experimental.Builder", "lombok.Builder", annotation);
+      checkFor("lombok.experimental.Value", "lombok.Value", annotation);
+      checkFor("lombok.experimental.Wither", "lombok.With", annotation);
     }
 
-    private void checkFor(String deprecatedAnnotationFQN, PsiAnnotation psiAnnotation) {
+    private void checkFor(String deprecatedAnnotationFQN, String newAnnotationFQN, PsiAnnotation psiAnnotation) {
       final String annotationQualifiedName = psiAnnotation.getQualifiedName();
       if (Objects.equals(deprecatedAnnotationFQN, annotationQualifiedName)) {
         final PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(psiAnnotation, PsiModifierListOwner.class, false);
         if (null != listOwner) {
-          final String newAnnotationFQN = deprecatedAnnotationFQN.replace("experimental.", "");
 
           holder.registerProblem(psiAnnotation,
             "Lombok annotation '" + deprecatedAnnotationFQN + "' is deprecated and " +
               "not supported by lombok-plugin any more. Use '" + newAnnotationFQN + "' instead.",
             ProblemHighlightType.ERROR,
-            new AddAnnotationFix(newAnnotationFQN, listOwner, deprecatedAnnotationFQN));
+            new AddAnnotationFix(newAnnotationFQN,
+              listOwner,
+              psiAnnotation.getParameterList().getAttributes(),
+              deprecatedAnnotationFQN));
         }
       }
     }

@@ -1,6 +1,5 @@
 package de.plushnikov.intellij.plugin.inspection;
 
-import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -25,29 +24,6 @@ public class LombokInspection extends AbstractBaseJavaLocalInspectionTool {
 
   public LombokInspection() {
     valProcessor = ServiceManager.getService(ValProcessor.class);
-  }
-
-  @NotNull
-  @Override
-  public String getDisplayName() {
-    return "Lombok annotations inspection";
-  }
-
-  @NotNull
-  @Override
-  public String getGroupDisplayName() {
-    return GroupNames.BUGS_GROUP_NAME;
-  }
-
-  @NotNull
-  @Override
-  public String getShortName() {
-    return "Lombok";
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
   }
 
   @NotNull
